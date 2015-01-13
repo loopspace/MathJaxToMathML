@@ -1,42 +1,78 @@
 <!DOCTYPE html>
-        <html>
-        <head>
-        <title>MathJax TeX to MathML Page</title>
-        <script>
-        function toMathML(jax,callback) {
-          var mml;
-          try {
-            mml = jax.root.toMathML("");
-          } catch(err) {
-            if (!err.restart) {throw err} // an actual error
-            return MathJax.Callback.After([toMathML,jax,callback],err.restart);
-          }
-          MathJax.Callback(callback)(mml);
-        }
-        </script>
-        <script type="text/x-mathjax-config">
-          MathJax.Hub.Config({
-            tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]}
-          });
-          MathJax.Hub.Queue(
-            function () {
-              var jax = MathJax.Hub.getAllJax();
-              for (var i = 0; i < jax.length; i++) {
-                toMathML(jax[i],function (mml) {
-                  alert(jax[i].originalText + "\n\n=>\n\n"+ mml);
-                });
-              }
-            }
-          );
-        </script>
-        <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full
-"></script>
-        </head>
-        <body>
-        <p>
-        When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and  
-they are
-        $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
-        </p>
-        </body>
-        </html>
+<html>
+  <head>
+    <title>MathJax TeX to MathML Page</title>
+    <script>
+      function toMathML(jax,callback) {
+      var mml;
+      try {
+      mml = jax.root.toMathML("");
+      } catch(err) {
+      if (!err.restart) {throw err} // an actual error
+      return MathJax.Callback.After([toMathML,jax,callback],err.restart);
+      }
+      MathJax.Callback(callback)(mml);
+      }
+    </script>
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+      tex2jax: {
+      inlineMath: [["$","$"],["\\(","\\)"]],
+      processClass: "mathjax",
+      ignoreClass: "no-mathjax",
+      },
+      });
+    </script>
+    <script type="text/javascript">
+      function resettex() {
+      var tbox = document.getElementById("tex");
+      var tex = tbox.value;
+      var texp = document.getElementById("texoutput");
+      texp.innerHTML = tex;
+      MathJax.Hub.Queue(["Typeset",MathJax.Hub,texp]);
+      MathJax.Hub.Queue(
+      function () {
+      var jax = MathJax.Hub.getAllJax();
+      var txt = "";
+      var elt = document.getElementById("mmloutput");
+      elt.innerHTML = '';
+      for (var i = 0; i < jax.length; i++) {
+			  toMathML(jax[i],function (mml) {
+			  var tr = document.createElement('tr');
+			  var td = document.createElement('td');
+			  var code = document.createElement('code');
+			  var telt = document.createTextNode(jax[i].originalText);
+			  code.appendChild(telt);
+			  td.appendChild(code);
+			  tr.appendChild(td);
+
+			  var td = document.createElement('td');
+			  var code = document.createElement('code');
+			  var telt = document.createTextNode(mml);
+
+			  code.appendChild(telt);
+			  td.appendChild(code);
+			  tr.appendChild(td);
+
+			  elt.appendChild(tr);
+			  });
+			  }
+			  }
+			  );
+      }
+    </script>
+    <script type="text/javascript"
+	    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  </head>
+  <body class="no-mathjax">
+    <p>
+      <form id="form"></form>
+      <textarea name="tex" id="tex" form="form" class="texinput"
+		rows="10" cols="50" oninput="resettex();"></textarea>
+    </p>
+    <p id="texoutput" class="mathjax">
+    </p>
+    <table id="mmloutput">
+    </table>
+  </body>
+</html>
