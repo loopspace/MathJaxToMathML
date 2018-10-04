@@ -2,6 +2,11 @@
 <html>
   <head>
     <title>MathJax TeX to MathML Page</title>
+		<style type="text/css">
+			#mmloutput td {
+				padding-left: 10px;
+			}
+		</style>
     <script>
       function toMathML(jax,callback) {
       var mml;
@@ -24,6 +29,22 @@
       });
     </script>
     <script type="text/javascript">
+function selectElementText(el, win) {
+    win = win || window;
+    var doc = win.document, sel, range;
+    if (win.getSelection && doc.createRange) {
+        sel = win.getSelection();
+        range = doc.createRange();
+        range.selectNodeContents(el);
+        sel.removeAllRanges();
+        sel.addRange(range);
+    } else if (doc.body.createTextRange) {
+        range = doc.body.createTextRange();
+        range.moveToElementText(el);
+        range.select();
+}
+}
+
       function resettex() {
       var tbox = document.getElementById("tex");
       var tex = tbox.value;
@@ -49,6 +70,9 @@
 			  var td = document.createElement('td');
 			  var code = document.createElement('code');
 			  var telt = document.createTextNode(mml);
+			  td.onclick = function(e) {
+			  selectElementText(telt);
+			  };
 
 			  code.appendChild(telt);
 			  td.appendChild(code);
@@ -62,7 +86,7 @@
       }
     </script>
     <script type="text/javascript"
-	    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+	    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=MML_HTMLorMML"></script>
   </head>
   <body class="no-mathjax">
     <h1>LaTeX Mathematics to MathML Convertor</h1>
