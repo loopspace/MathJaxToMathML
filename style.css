@@ -1,0 +1,21 @@
+body {
+    background: #8b1a1a;
+}
+
+#content {
+    max-width: 210mm;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 5pt;
+    padding: 2em;
+}
+
+#mmloutput td {
+    padding-left: 10px;
+}
+#mmloutput td.first-column {
+    width: 20%;
+}
+.do-mmljax {
+    display: none;
+}

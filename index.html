@@ -1,94 +1,18 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8">
     <title>MathJax TeX to MathML Page</title>
-		<style type="text/css">
-			#mmloutput td {
-				padding-left: 10px;
-			}
-		</style>
-    <script>
-      function toMathML(jax,callback) {
-      var mml;
-      try {
-      mml = jax.root.toMathML("");
-      } catch(err) {
-      if (!err.restart) {throw err} // an actual error
-      return MathJax.Callback.After([toMathML,jax,callback],err.restart);
-      }
-      MathJax.Callback(callback)(mml);
-      }
-    </script>
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-      tex2jax: {
-      inlineMath: [["$","$"],["\\(","\\)"]],
-      processClass: "mathjax",
-      ignoreClass: "no-mathjax",
-      },
-      });
-    </script>
-    <script type="text/javascript">
-function selectElementText(el, win) {
-    win = win || window;
-    var doc = win.document, sel, range;
-    if (win.getSelection && doc.createRange) {
-        sel = win.getSelection();
-        range = doc.createRange();
-        range.selectNodeContents(el);
-        sel.removeAllRanges();
-        sel.addRange(range);
-    } else if (doc.body.createTextRange) {
-        range = doc.body.createTextRange();
-        range.moveToElementText(el);
-        range.select();
-}
-}
-
-      function resettex() {
-      var tbox = document.getElementById("tex");
-      var tex = tbox.value;
-      var texp = document.getElementById("texoutput");
-      texp.innerHTML = tex;
-      MathJax.Hub.Queue(["Typeset",MathJax.Hub,texp]);
-      MathJax.Hub.Queue(
-      function () {
-      var jax = MathJax.Hub.getAllJax();
-      var txt = "";
-      var elt = document.getElementById("mmloutput");
-      elt.innerHTML = '';
-      for (var i = 0; i < jax.length; i++) {
-			  toMathML(jax[i],function (mml) {
-			  var tr = document.createElement('tr');
-			  var td = document.createElement('td');
-			  var code = document.createElement('code');
-			  var telt = document.createTextNode(jax[i].originalText);
-			  code.appendChild(telt);
-			  td.appendChild(code);
-			  tr.appendChild(td);
-
-			  var td = document.createElement('td');
-			  var code = document.createElement('code');
-			  var telt = document.createTextNode(mml);
-			  td.onclick = function(e) {
-			  selectElementText(telt);
-			  };
-
-			  code.appendChild(telt);
-			  td.appendChild(code);
-			  tr.appendChild(td);
-
-			  elt.appendChild(tr);
-			  });
-			  }
-			  }
-			  );
-      }
-    </script>
+    <link rel="stylesheet" type="text/css" href="style.css">
     <script type="text/javascript"
-	    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=MML_HTMLorMML"></script>
+	    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js"
+	    defer></script>
+    <script type="text/javascript"
+	    src="main.js"
+	    defer></script>
   </head>
   <body class="no-mathjax">
+    <div id="content">
     <h1>LaTeX Mathematics to MathML Convertor</h1>
     <h2>Instructions</h2>
     <p>
@@ -110,10 +34,11 @@ function selectElementText(el, win) {
 		rows="10" cols="50" oninput="resettex();"></textarea>
     </p>
     <h2>Rendered Mathematics</h2>
-    <p id="texoutput" class="mathjax">
+    <p id="texoutput" class="do-mathjax">
     </p>
     <h2>Raw MathML</h2>
     <table id="mmloutput">
     </table>
+    </div>
   </body>
 </html>
